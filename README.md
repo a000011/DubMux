@@ -32,6 +32,8 @@ DubMux решает эту проблему автоматизацией: соп
 
 ![DubMux Screenshot 2](icon/Screenshot%202026-05-12%20015254.png)
 
+![DubMux Screenshot 3](icon/Screenshot%202026-05-12%20020227.png)
+
 ## Основной функционал
 
 1. Выбор папок:
