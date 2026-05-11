@@ -1,0 +1,63 @@
+name: Build and Release DubMux
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tagName:
+        description: "Release tag (example: v0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install FFmpeg
+        shell: pwsh
+        run: choco install ffmpeg -y
+
+      - name: Copy FFmpeg binaries into Tauri bundle resources
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "src-tauri/bin" | Out-Null
+          $ffmpegPath = (Get-Command ffmpeg.exe).Source
+          $ffprobePath = (Get-Command ffprobe.exe).Source
+          Copy-Item $ffmpegPath -Destination "src-tauri/bin/ffmpeg.exe" -Force
+          Copy-Item $ffprobePath -Destination "src-tauri/bin/ffprobe.exe" -Force
+
+      - name: Build and publish Tauri release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tagName || github.ref_name }}
+          releaseName: DubMux ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tagName || github.ref_name }}
+          releaseBody: |
+            Automated DubMux release.
+
+            Downloads:
+            - Windows installer (.exe)
+          releaseDraft: false
+          prerelease: false

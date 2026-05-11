@@ -17,6 +17,21 @@ describe("extractEpisodeNumber", () => {
     });
   });
 
+  it("does not match resolution numbers in filenames", () => {
+    expect(
+      extractEpisodeNumber(
+        "Azumanga Daioh - 01 [BD-DVDRip 1440x1080 x265 FLAC].mkv",
+      ),
+    ).toMatchObject({
+      episodeNumber: 1,
+      source: "numeric-token",
+    });
+    expect(extractEpisodeNumber("Show 1920x1080 - 08.mkv")).toMatchObject({
+      episodeNumber: 8,
+      source: "numeric-token",
+    });
+  });
+
   it("allows a custom regex to override built-in parsing", () => {
     expect(
       extractEpisodeNumber("Episode-014-track.flac", "Episode-(\\d+)"),

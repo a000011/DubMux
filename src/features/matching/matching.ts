@@ -2,6 +2,7 @@ import type {
   EpisodeParseResult,
   MatchPreview,
   MatchRow,
+  MatchStatus,
   MediaFile,
   MediaKind,
   ParsedMediaFile,
@@ -22,7 +23,7 @@ const builtInPatterns: Array<{
   regex: RegExp;
 }> = [
   { source: "season-episode", regex: /s\d{1,2}e(\d{1,3})/i },
-  { source: "x-format", regex: /\d{1,2}x(\d{1,3})/i },
+  { source: "x-format", regex: /(?<!\d)\d{1,2}x(\d{1,3})(?!\d)/i },
   { source: "episode-tag", regex: /(?:episode|ep|e)[\s._-]*(\d{1,3})(?!\d)/i },
   { source: "numeric-token", regex: /(?:^|[^\d])(\d{2,3})(?:[^\d]|$)/ },
 ];
@@ -162,14 +163,13 @@ export function buildMatchPreview(
     .filter((row) => row.episodeNumber !== null)
     .map((row) => ({
       ...row,
-      status:
-        row.videos.length === 1 && row.audios.length === 1
-          ? "matched"
-          : row.videos.length > 1 || row.audios.length > 1
-            ? "conflict"
-            : row.videos.length === 1
-              ? "video-only"
-              : "audio-only",
+      status: (row.videos.length === 1 && row.audios.length === 1
+        ? "matched"
+        : row.videos.length > 1 || row.audios.length > 1
+          ? "conflict"
+          : row.videos.length === 1
+            ? "video-only"
+            : "audio-only") as MatchStatus,
     }))
     .sort(
       (left, right) => (left.episodeNumber ?? 0) - (right.episodeNumber ?? 0),

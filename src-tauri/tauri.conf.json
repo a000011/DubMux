@@ -12,6 +12,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "DubMux",
         "width": 1320,
         "height": 880,
@@ -23,6 +24,7 @@
   },
   "bundle": {
     "active": true,
+    "resources": ["bin/ffmpeg.exe", "bin/ffprobe.exe"],
     "targets": ["nsis"],
     "windows": {
       "digestAlgorithm": "sha256"

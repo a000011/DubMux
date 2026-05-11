@@ -2,6 +2,9 @@ use serde::Serialize;
 use std::fs;
 use std::path::Path;
 
+mod commands;
+use commands::process_mux_jobs;
+
 #[derive(Serialize)]
 struct FolderEntry {
     path: String,
@@ -34,7 +37,7 @@ fn scan_folder(folder_path: String) -> Result<Vec<FolderEntry>, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![scan_folder])
+        .invoke_handler(tauri::generate_handler![scan_folder, process_mux_jobs])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -31,6 +31,7 @@ export interface MatchRow {
   status: MatchStatus;
   videos: ParsedMediaFile[];
   audios: ParsedMediaFile[];
+  selectedAudioPath?: string; // User override: full path to selected audio file
 }
 
 export interface MatchPreview {
@@ -38,4 +39,5 @@ export interface MatchPreview {
   unmatchedVideos: ParsedMediaFile[];
   unmatchedAudios: ParsedMediaFile[];
   invalidCustomPattern?: string;
+  hasOverrides?: boolean; // True if any user overrides exist
 }
