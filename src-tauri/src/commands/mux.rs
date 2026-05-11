@@ -115,7 +115,19 @@ fn count_audio_streams(video_path: &str, ffprobe_exe: &str) -> Result<usize, Str
 
     if !output.status.success() {
         let stderr = String::from_utf8_lossy(&output.stderr);
-        return Err(format!("FFprobe failed: {}", stderr));
+        let stdout = String::from_utf8_lossy(&output.stdout);
+        let code = output.status.code().map_or_else(
+            || "terminated by signal".to_string(),
+            |c| c.to_string(),
+        );
+        return Err(format!(
+            "FFprobe failed (bin: {}, code: {}). video: {}. stderr: {} stdout: {}",
+            ffprobe_exe,
+            code,
+            video_path,
+            stderr.trim(),
+            stdout.trim()
+        ));
     }
 
     let stdout = String::from_utf8_lossy(&output.stdout);

@@ -34,16 +34,23 @@ jobs:
       - name: Install frontend dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Install FFmpeg
-        shell: pwsh
-        run: choco install ffmpeg -y
-
-      - name: Copy FFmpeg binaries into Tauri bundle resources
+      - name: Download FFmpeg portable build
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "src-tauri/bin" | Out-Null
-          $ffmpegPath = (Get-Command ffmpeg.exe).Source
-          $ffprobePath = (Get-Command ffprobe.exe).Source
+          New-Item -ItemType Directory -Force -Path "tools" | Out-Null
+          $zipPath = "tools/ffmpeg.zip"
+          $extractPath = "tools/ffmpeg"
+          Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
+
+          $ffmpegPath = Get-ChildItem -Path $extractPath -Recurse -Filter "ffmpeg.exe" | Select-Object -First 1 -ExpandProperty FullName
+          $ffprobePath = Get-ChildItem -Path $extractPath -Recurse -Filter "ffprobe.exe" | Select-Object -First 1 -ExpandProperty FullName
+
+          if (-not $ffmpegPath -or -not $ffprobePath) {
+            throw "Failed to locate ffmpeg.exe or ffprobe.exe in downloaded archive"
+          }
+
           Copy-Item $ffmpegPath -Destination "src-tauri/bin/ffmpeg.exe" -Force
           Copy-Item $ffprobePath -Destination "src-tauri/bin/ffprobe.exe" -Force
 
