@@ -2,31 +2,31 @@
 
 ![DubMux Banner](icon/banner.png)
 
-DubMux — это desktop-приложение для быстрого добавления внешней озвучки к сериалам и аниме.
+DubMux is a desktop app for quickly adding external dubbed audio tracks to TV series and anime episodes.
 
-Главная идея: вместо ручной обработки каждого файла по отдельности, ты выбираешь папку с эпизодами и папку с аудио, а дальше приложение делает все пакетно в пару кликов.
+The main idea: instead of manually processing every file one by one, you select a season folder and an audio folder, and DubMux handles everything in batch mode in just a few clicks.
 
-## Зачем это нужно
+## Why This App Exists
 
-Частая ситуация при скачивании сериалов из интернета:
+A common scenario when downloading series from the internet:
 
-- видеоэпизоды лежат в одной папке;
-- нужная озвучка/дубляж лежит отдельно (часто в другом релизе);
-- вручную совмещать каждую серию через медиаконвертер долго и неудобно.
+- video episodes are in one folder;
+- the preferred voice-over or dub is delivered in a separate folder/release;
+- manually combining each episode in a media tool is slow and tedious.
 
-DubMux решает эту проблему автоматизацией: сопоставляет эпизоды, показывает превью, дает контроль над конфликтами и затем обрабатывает всю очередь.
+DubMux solves this with automation: it matches episodes, shows a preview, lets you resolve conflicts, and then processes the entire queue.
 
-## Преимущества
+## Key Advantages
 
-- Пакетная обработка всего сезона, а не файлов по одному
-- Автоматическое сопоставление эпизодов по названиям
-- Поддержка нестандартного нейминга через custom regex
-- Ручной режим сопоставления, если авто-матч не сработал
-- Добавление внешней дорожки в видео без удаления уже существующих аудиодорожек
-- Прогресс обработки и понятные уведомления об ошибках/успехе
-- Готовый Windows-бинарник через GitHub Releases
+- Batch processing for a whole season instead of one file at a time
+- Automatic episode matching based on filenames
+- Support for non-standard naming via custom regex
+- Manual matching mode when auto-matching is not enough
+- Adds an external audio track without removing existing audio tracks
+- Processing progress with clear success/error notifications
+- Ready-to-download Windows binaries via GitHub Releases
 
-## Скриншоты
+## Screenshots
 
 ![DubMux Screenshot 1](icon/Screenshot%202026-05-12%20015245.png)
 
@@ -34,38 +34,38 @@ DubMux решает эту проблему автоматизацией: соп
 
 ![DubMux Screenshot 3](icon/Screenshot%202026-05-12%20020227.png)
 
-## Основной функционал
+## Core Features
 
-1. Выбор папок:
-   - Season folder (видео)
-   - Audio folder (озвучка)
-   - Output folder (результат)
-2. Автоматический анализ файлов и сопоставление эпизодов
-3. Ручная корректировка конфликтов и unmatched файлов
-4. Планирование jobs перед запуском
-5. Пакетный mux через FFmpeg с добавлением внешнего аудио-трека
+1. Folder selection:
+   - Season folder (video files)
+   - Audio folder (external dub tracks)
+   - Output folder (processed results)
+2. Automatic episode parsing and matching
+3. Manual conflict resolution and unmatched-file pairing
+4. Job planning before processing starts
+5. Batch FFmpeg muxing with external audio track injection
 
-## Поддерживаемые форматы
+## Supported Formats
 
-- Видео: `.mkv`, `.mp4`, `.avi`
-- Аудио: `.aac`, `.m4a`, `.mp3`, `.flac`, `.wav`, `.mka`
+- Video: `.mkv`, `.mp4`, `.avi`
+- Audio: `.aac`, `.m4a`, `.mp3`, `.flac`, `.wav`, `.mka`
 
-## Быстрый старт (для пользователя)
+## Quick Start (End Users)
 
-1. Скачай последний релиз в разделе Releases
-2. Установи приложение (Windows installer)
-3. Открой DubMux
-4. Выбери папку сезона и папку с озвучкой
-5. Проверь сопоставление и нажми Start Processing
+1. Download the latest release from GitHub Releases
+2. Install the app (Windows installer)
+3. Launch DubMux
+4. Select your season folder and audio folder
+5. Review matches and click Start Processing
 
-## Для разработки
+## Development
 
 ```bash
 yarn install
 yarn tauri dev
 ```
 
-Сборка:
+Build:
 
 ```bash
 yarn build
@@ -73,13 +73,13 @@ yarn build
 
 ## Release pipeline
 
-Релизная сборка запускается GitHub Actions workflow по тегу `v*`.
+Release builds are triggered by the GitHub Actions workflow on tags matching `v*`.
 
-Пример:
+Example:
 
 ```bash
 git tag -a v0.1.1 -m "Release v0.1.1"
 git push origin v0.1.1
 ```
 
-После этого в GitHub Releases появится готовый installer.
+After that, the installer will be published to GitHub Releases.
