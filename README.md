@@ -1,104 +1,83 @@
 # DubMux
 
-Windows desktop utility for batch-adding external audio tracks to episodic video files with automatic episode matching and FFmpeg muxing.
+![DubMux Banner](icon/banner.png)
 
-## Current increment
+DubMux — это desktop-приложение для быстрого добавления внешней озвучки к сериалам и аниме.
 
-This repository currently contains the first implementation slice:
+Главная идея: вместо ручной обработки каждого файла по отдельности, ты выбираешь папку с эпизодами и папку с аудио, а дальше приложение делает все пакетно в пару кликов.
 
-- Tauri desktop shell
-- React + TypeScript frontend
-- Native folder picker
-- Top-level folder scan through a Rust command
-- Episode number extraction with built-in patterns and custom regex
-- Preview table for matched, unmatched, and conflicting files
+## Зачем это нужно
 
-FFmpeg integration is intentionally deferred to the next increment.
+Частая ситуация при скачивании сериалов из интернета:
 
-## Prerequisites
+- видеоэпизоды лежат в одной папке;
+- нужная озвучка/дубляж лежит отдельно (часто в другом релизе);
+- вручную совмещать каждую серию через медиаконвертер долго и неудобно.
 
-- Node.js 20+
-- Yarn Classic 1.x
-- Rust stable with MSVC toolchain
-- WebView2 Runtime on Windows
+DubMux решает эту проблему автоматизацией: сопоставляет эпизоды, показывает превью, дает контроль над конфликтами и затем обрабатывает всю очередь.
 
-## Install
+## Преимущества
 
-```powershell
+- Пакетная обработка всего сезона, а не файлов по одному
+- Автоматическое сопоставление эпизодов по названиям
+- Поддержка нестандартного нейминга через custom regex
+- Ручной режим сопоставления, если авто-матч не сработал
+- Добавление внешней дорожки в видео без удаления уже существующих аудиодорожек
+- Прогресс обработки и понятные уведомления об ошибках/успехе
+- Готовый Windows-бинарник через GitHub Releases
+
+## Скриншоты
+
+![DubMux Screenshot 1](icon/Screenshot%202026-05-12%20015245.png)
+
+![DubMux Screenshot 2](icon/Screenshot%202026-05-12%20015254.png)
+
+## Основной функционал
+
+1. Выбор папок:
+   - Season folder (видео)
+   - Audio folder (озвучка)
+   - Output folder (результат)
+2. Автоматический анализ файлов и сопоставление эпизодов
+3. Ручная корректировка конфликтов и unmatched файлов
+4. Планирование jobs перед запуском
+5. Пакетный mux через FFmpeg с добавлением внешнего аудио-трека
+
+## Поддерживаемые форматы
+
+- Видео: `.mkv`, `.mp4`, `.avi`
+- Аудио: `.aac`, `.m4a`, `.mp3`, `.flac`, `.wav`, `.mka`
+
+## Быстрый старт (для пользователя)
+
+1. Скачай последний релиз в разделе Releases
+2. Установи приложение (Windows installer)
+3. Открой DubMux
+4. Выбери папку сезона и папку с озвучкой
+5. Проверь сопоставление и нажми Start Processing
+
+## Для разработки
+
+```bash
 yarn install
-```
-
-## Run in development
-
-```powershell
 yarn tauri dev
 ```
 
-## Run tests
-
-```powershell
-yarn test
-```
-
-## First implementation notes
-
-- Folder scan is top-level only for now.
-- Supported video extensions: `.mkv`, `.mp4`, `.avi`
-- Supported audio extensions: `.aac`, `.m4a`, `.mp3`, `.flac`, `.wav`, `.mka`
-- Custom regex must expose the episode number in capture group 1.
-
-# GreetingApp - C# WPF Application
-
-Простое десктоп приложение на C# с использованием фреймворка WPF (Windows Presentation Foundation).
-
-## Описание
-
-Приложение отображает приветственное окно с русским текстом "Добро пожаловать!" и кнопкой для закрытия.
-
-## Структура проекта
-
-- `GreetingApp.csproj` - файл проекта с конфигурацией
-- `App.xaml` / `App.xaml.cs` - главное приложение
-- `MainWindow.xaml` / `MainWindow.xaml.cs` - главное окно с UI
-
-## Требования
-
-- **.NET 8.0 SDK** или выше
-- **Visual Studio Code** с расширениями для C#
-- Опционально: Visual Studio 2022
-
-## Установка .NET SDK
-
-Скачайте и установите .NET SDK с официального сайта:
-https://dotnet.microsoft.com/download
-
-## Компиляция и запуск
-
-### Скомпилировать:
+Сборка:
 
 ```bash
-dotnet build
+yarn build
 ```
 
-### Запустить:
+## Release pipeline
+
+Релизная сборка запускается GitHub Actions workflow по тегу `v*`.
+
+Пример:
 
 ```bash
-dotnet run
+git tag -a v0.1.1 -m "Release v0.1.1"
+git push origin v0.1.1
 ```
 
-## Рекомендуемые расширения для VS Code
-
-- C# (powered by OmniSharp)
-- C# Dev Kit
-- XAML Styler
-
-## Возможные улучшения
-
-- Добавить больше элементов управления
-- Создать диалоги и формы
-- Добавить логику приложения
-- Оформление и стили
-
----
-
-Автор: Созданно с помощью GitHub Copilot
+После этого в GitHub Releases появится готовый installer.
